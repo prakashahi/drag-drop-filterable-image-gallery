@@ -61,10 +61,10 @@ function initDragAndResize(e) {
     const x = (e.clientX || e.touches[0].clientX) - rect.left;
     const y = (e.clientY || e.touches[0].clientY) - rect.top;
     
+    // Prevent scrolling on touch devices
+    if(e.touches?.length) e.preventDefault();
+    
     const move = (e) => {
-        // Prevent scrolling on touch devices
-        if(e.touches?.length) document.body.style.overflowY = "hidden";
-
         // Get the draggable area for limiting movement
         const draggableArea = this.closest(".draggable-area");
         const maxLeft = draggableArea.offsetWidth - this.offsetWidth;
@@ -83,9 +83,6 @@ function initDragAndResize(e) {
 
     // Function for resizing the element
     const resize = (e) => {
-        // Prevent scrolling on touch devices
-        if(e.touches?.length) document.body.style.overflowY = "hidden";
-
         // Calculate new width and height of the element
         const newWidth = rect.width + ((e.clientX || e.touches[0].clientX) - rect.left - x);
         const newHeight = rect.height + ((e.clientY || e.touches[0].clientY) - rect.top - y);
