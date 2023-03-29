@@ -60,9 +60,9 @@ function initDragAndResize(e) {
     const rect = this.getBoundingClientRect();
     const x = (e.clientX || e.touches[0].clientX) - rect.left;
     const y = (e.clientY || e.touches[0].clientY) - rect.top;
-    
+
     // Prevent scrolling on touch devices
-    if(e.touches?.length) e.preventDefault();
+    if(e.touches?.length) document.body.style.overflowY = "hidden";
     
     const move = (e) => {
         // Get the draggable area for limiting movement
@@ -93,21 +93,22 @@ function initDragAndResize(e) {
     }
 
     // Check if the mouse/touch is on the bottom-right corner of the element
-    const isBottomRight = (x > rect.width - 13) && (y > rect.height - 13);
+    const isBottomRight = (x > rect.width - 20) && (y > rect.height - 20);
 
     // Add event listeners for dragging and resizing
     document.addEventListener("mousemove", isBottomRight ? resize : move);
     document.addEventListener("touchmove", isBottomRight ? resize : move);
 
     // Remove event listeners when dragging/resizing is finished
-    (document || this).addEventListener("mouseup", () => {
-        document.removeEventListener("mousemove", isBottomRight ? resize : move);
-    });
-
-    (document || this).addEventListener("touchend", () => {
+    const removeListeners = () => {
         document.body.style.overflowY = "auto";
+        document.removeEventListener("mousemove", isBottomRight ? resize : move);
         document.removeEventListener("touchmove", isBottomRight ? resize : move);
-    });
+    }
+
+    document.addEventListener("mouseup", removeListeners);
+    document.addEventListener("touchend", removeListeners);
+    document.addEventListener("touchcancel", removeListeners);
 }
   
 // Function to add an image to the shirt
