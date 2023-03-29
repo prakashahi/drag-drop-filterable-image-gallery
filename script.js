@@ -62,7 +62,7 @@ function initDragAndResize(e) {
     const y = (e.clientY || e.touches[0].clientY) - rect.top;
     
     // Prevent scrolling on touch devices
-    if(e.touches?.length) e.preventDefault();
+    if(e.touches?.length) document.body.style.overflowY = "hidden";
     
     const move = (e) => {
         // Get the draggable area for limiting movement
